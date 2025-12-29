@@ -30,5 +30,32 @@ function transition(content) {
 }
 
 function shadowrocketToQuantumultX(line) {
-    return line.replace(/DOMAIN-SUFFIX/g, "HOST-SUFFIX");
+    // 1. 在方法内部定义映射表
+    const typeMap = {
+        "DOMAIN-SUFFIX": "HOST-SUFFIX",
+        "DOMAIN": "HOST",
+        "DOMAIN-KEYWORD": "HOST-KEYWORD",
+        "IP-CIDR": "IP-CIDR",
+        "IP-CIDR6": "IP-CIDR6"
+    };
+
+    // 2. 按逗号切分并清理空格
+    let parts = line.split(",").map(p => p.trim());
+    
+    let type = parts[0];
+    let value = parts[1];
+    let policy = parts[2];
+
+    // 3. 转换类型字段：如果在映射表里就替换
+    if (typeMap[type]) {
+        type = typeMap[type];
+    }
+
+    // 4. 补全策略：如果没有策略字段，则默认为 PROXY
+    if (!policy) {
+        policy = "PROXY";
+    }
+
+    // 5. 重新组合返回
+    return `${type},${value},${policy}`;
 }
