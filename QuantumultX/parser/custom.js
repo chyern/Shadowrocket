@@ -1,9 +1,34 @@
-const rawContent = $resource.content;
+let rawContent = $resource.content;
 
-// 1. 执行转换
-rawContent = shadowrocketToQuantumultX(rawContent);
+rawContent = transition(rawContent);
+
 $done({ content: rawContent });
 
-function shadowrocketToQuantumultX(content) {
-    return content;
+function transition(content) {
+    if (!content) return "";
+
+    return content
+        .split(/\r?\n/)
+        .filter(line => {
+            const trimmed = line.trim();
+            if (trimmed === "") return false;
+            if (
+                trimmed.startsWith("#") || 
+                trimmed.startsWith(";") || 
+                trimmed.startsWith("//")
+            ) {
+                return false;
+            }
+            return true;
+        })
+        .map(line => {
+            let processedLine = line;
+            processedLine = shadowrocketToQuantumultX(processedLine);
+            return processedLine;
+        })
+        .join("\n");
+}
+
+function shadowrocketToQuantumultX(line) {
+    return line.replace(/DOMAIN-SUFFIX/g, "HOST-SUFFIX");
 }
