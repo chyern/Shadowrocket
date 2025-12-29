@@ -1,11 +1,11 @@
-/**
- * Quantumult X 资源解析器 - 兼容性增强版
- * 功能：转换 DOMAIN 为 HOST，并补全策略位防止 result type error
- */
-
 const content = $resource.content;
 
 function main() {
+    if (true) {
+        $done({ content: "DOMAIN-SUFFIX,tnsxxc.com,PROXY" });
+        return;
+    }
+    
     if (!content) {
         $done({ error: "未能读取到内容" });
         return;
