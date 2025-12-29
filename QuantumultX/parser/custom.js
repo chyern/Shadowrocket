@@ -49,6 +49,8 @@ function shadowrocketToQuantumultX(line) {
     // 3. 转换类型字段：如果在映射表里就替换
     if (typeMap[type]) {
         type = typeMap[type];
+    } else {
+        return line;
     }
 
     // 4. 补全策略：如果没有策略字段，则默认为 PROXY
