@@ -13,28 +13,28 @@ function main() {
 
         // 1. 过滤空行和注释
         if (line === "" || line.startsWith("#") || line.startsWith(";")) {
-            return item; 
+            return line; 
         }
 
         // 2. 独立 if 判断开头 (i 忽略大小写)
         
         // 匹配 DOMAIN-SUFFIX 开头
         if (/^DOMAIN-SUFFIX/i.test(line)) {
-            item = item.replace(/DOMAIN-SUFFIX/i, "HOST-SUFFIX");
+            line = line.replace(/DOMAIN-SUFFIX/i, "HOST-SUFFIX");
         } 
         
         // 匹配 DOMAIN-KEYWORD 开头
         if (/^DOMAIN-KEYWORD/i.test(line)) {
-            item = item.replace(/DOMAIN-KEYWORD/i, "HOST-KEYWORD");
+            line = line.replace(/DOMAIN-KEYWORD/i, "HOST-KEYWORD");
         } 
         
-        // 匹配 DOMAIN 开头
-        // 注意：为避免误匹配 DOMAIN-SUFFIX，这里正则加了逗号边界或行尾判断
+        // 匹配 DOMAIN 开头 (增加边界判断防止误伤 SUFFIX)
         if (/^DOMAIN,/i.test(line) || /^DOMAIN$/i.test(line)) {
-            item = item.replace(/DOMAIN/i, "HOST");
+            line = line.replace(/DOMAIN/i, "HOST");
         }
 
-        return item;
+        // 返回处理后的 line
+        return line;
     });
 
     $done({ content: processedLines.join("\n") });
